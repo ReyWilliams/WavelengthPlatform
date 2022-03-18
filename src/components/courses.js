@@ -39,9 +39,9 @@ const Course = (props) => {
 
         setCourse((prevState) => {
           prevState.reviews.splice(index, 1);
-          return ({
+          return {
             ...prevState,
-          });
+          };
         });
       })
       .catch((e) => {
@@ -64,60 +64,64 @@ const Course = (props) => {
           <hr />
           <h3 className="my-3 text-center"> Reviews </h3>
           <div className="d-flex justify-content-center mb-4">
-            <Link to={`/courses/${props.match.params.id}/review`} className="btn btn-primary">
+            <Link
+              to={`/courses/${props.match.params.id}/review`}
+              className="btn btn-primary"
+            >
               Add Review
             </Link>
           </div>
           <div className="row">
-            {course?.reviews?.length > 0 ? (
-              course.reviews.map((review, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <div className="col-lg-4 pb-1" key={`${index}-col`}>
-                  <div className="card">
-                    <div className="card-body">
-                      <p className="card-text">
-                        <div className="d-flex justify-content-between">
-                          <div>
-                            <strong className="text-primary">
-                              {review.name}
-                            </strong>
-                          </div>
-                          <div>
-                            {moment(review.date).format('MMMM do, yyyy')}
-                          </div>
+            {course?.reviews?.length > 0 ? (course.reviews.map((review, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <div className="col-lg-4 pb-1" key={`${index}-col`}>
+                <div className="card">
+                  <div className="card-body">
+                    <p className="card-text">
+                      <div className="d-flex justify-content-between">
+                        <div>
+                          <strong className="text-primary">
+                            {review.name}
+                          </strong>
                         </div>
-                        <hr />
-                        {review.text}
-                      </p>
-                      {user && user.email === review.user_id
-                          && (
-                          <div className="row">
-                            <a onClick={() => deleteReview(review._id, index)} className="btn btn-danger col-lg-5 mx-1 mb-1">Delete</a>
-                            <Link
-                              to={{
-                                pathname: `/courses/${props.match.params.id}/review`,
-                                state: {
-                                  currentReview: review,
-                                },
-                              }}
-                              className="btn btn-primary col-lg-5 mx-1 mb-1"
-                            >
-                              Edit
-                            </Link>
-                          </div>
-                          )}
+                        <div>
+                          {moment(review.date).utc().format('MMMM D, yyyy')}
+                        </div>
+                      </div>
+                      <hr />
+                      {review.text}
+                    </p>
+                    {user && user.email === review.user_id && (
+                    <div className="row">
+                      <a
+                        onClick={() => deleteReview(review._id, index)}
+                        className="btn btn-danger col-lg-5 mx-1 mb-1"
+                      >
+                        Delete
+                      </a>
+                      <Link
+                        to={{
+                          pathname: `/courses/${props.match.params.id}/review`,
+                          state: {
+                            currentReview: review,
+                          },
+                        }}
+                        className="btn btn-primary col-lg-5 mx-1 mb-1"
+                      >
+                        Edit
+                      </Link>
                     </div>
+                    )}
                   </div>
                 </div>
-              ))
+              </div>
+            ))
             ) : (
               <div className="col-sm-4">
                 <p>No reviews yet.</p>
               </div>
             )}
-
           </div>
-
         </div>
       ) : (
         <div>
